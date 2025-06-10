@@ -1,10 +1,16 @@
 # Web框架
 streamlit==1.28.0
+# Streamlit 服务器部署依赖
+altair<5
+protobuf<4
 
-# 构建工具（解决Python 3.12+ distutils问题）
+# 构建工具（解决Python 3.12+ distutils问题和服务器部署兼容性）
 setuptools>=68.0.0
 wheel>=0.41.0
 pip>=23.0.0
+# 兼容性包，确保在不同Python版本和服务器环境下正常运行
+importlib-metadata>=6.0.0
+packaging>=23.0
 
 # HTTP请求和环境配置
 requests==2.31.0

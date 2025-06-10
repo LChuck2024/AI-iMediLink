@@ -177,6 +177,13 @@ streamlit run 首页.py
 
 ### 常见问题
 
+1. **ModuleNotFoundError: No module named 'distutils'**
+   - 这是 Python 3.12+ 的兼容性问题
+   - 解决方案：使用 Python 3.9-3.11 或安装兼容包
+   ```bash
+   pip install setuptools>=68.0.0 wheel>=0.41.0
+   ```
+
 **Q: 启动时提示模块未找到**
 ```bash
 A: 确保已激活虚拟环境并安装所有依赖：
@@ -204,11 +211,24 @@ A: 确保ChromaDB数据已正确初始化：
 2. 重新运行应用以初始化向量数据库
 ```
 
+### 服务器部署
+
+如果需要在服务器上部署应用，请参考详细的 [部署指南](DEPLOYMENT.md)，其中包含：
+- 环境配置要求
+- Docker 部署方案
+- 常见部署问题解决
+- 性能优化建议
+
 ### 日志查看
 应用运行时的详细日志会显示在终端中，包括：
 - API调用状态
 - 知识库检索结果
 - 错误信息和堆栈跟踪
+
+```bash
+# 查看详细错误信息
+streamlit run 首页.py --logger.level debug
+```
 
 ## 开发指南
 
