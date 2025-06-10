@@ -6,7 +6,6 @@ from langchain_chroma import Chroma
 from langchain_community.document_compressors import DashScopeRerank
 from langchain_community.embeddings import DashScopeEmbeddings
 
-
 # 项目根目录
 current_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.dirname(current_dir)
@@ -17,6 +16,7 @@ chromadb_path = os.path.join(project_root, 'data/chroma_data')
 
 import json
 import os
+
 
 def load_info(info_type, json_file='config.json'):
     """从JSON文件中加载指定的模型信息。
@@ -35,7 +35,7 @@ def load_info(info_type, json_file='config.json'):
             config = json.load(f)
     except json.JSONDecodeError:
         config = {}
-    
+
     return config[info_type]
 
 
@@ -46,8 +46,9 @@ def read_prompt_file(dept):
         dept: 科室名称
         return: prompt内容
     """
-    with open(os.path.join(prompt_root,f"{dept}.md"), "r") as file:
+    with open(os.path.join(prompt_root, f"{dept}.md"), "r") as file:
         return file.read()
+
 
 # 收集文档
 def collect_documents(segments):
@@ -61,8 +62,9 @@ def collect_documents(segments):
         text.append(segment.page_content)
     return text
 
-def get_context_from_db(query="你好吗？", 
-                        num_recall=5, 
+
+def get_context_from_db(query="你好吗？",
+                        num_recall=5,
                         score_threshold=0.5):
     """
         根据query，检索相关的上下文
@@ -73,32 +75,32 @@ def get_context_from_db(query="你好吗？",
     """
 
     os.environ["DASHSCOPE_API_KEY"] = load_info("keys")["DASHSCOPE_API_KEY"]
-    rerank = DashScopeRerank(model="text-embedding-v3", top_n=4)# 连接
+    rerank = DashScopeRerank(model="text-embedding-v3", top_n=4)  # 连接
     client = HttpClient(host="localhost", port=8000)
 
     # 连接向量化模型
     embed = DashScopeEmbeddings(model='text-embedding-v3')
 
     # collection
-    db1 = Chroma(collection_name="db1", embedding_function=embed, client=client, persist_directory = chromadb_path)
-    db2 = Chroma(collection_name="db2", embedding_function=embed, client=client, persist_directory = chromadb_path)
-    db3 = Chroma(collection_name="db3", embedding_function=embed, client=client, persist_directory = chromadb_path)
-    db4 = Chroma(collection_name="db4", embedding_function=embed, client=client, persist_directory = chromadb_path)
+    # db1 = Chroma(collection_name="db1", embedding_function=embed, client=client, persist_directory = chromadb_path)
+    db2 = Chroma(collection_name="db2", embedding_function=embed, client=client, persist_directory=chromadb_path)
+    db3 = Chroma(collection_name="db3", embedding_function=embed, client=client, persist_directory=chromadb_path)
+    db4 = Chroma(collection_name="db4", embedding_function=embed, client=client, persist_directory=chromadb_path)
 
     # 1，先做召回
-    
+
     recall_results = []
-    
+
     # 第1路召回
-    results1 = db1.similarity_search_with_relevance_scores(query=query, k=num_recall)
-    
-    # 第1路筛选
-    for doc, score in results1:
-        if score > score_threshold:
-            # 执行 metadata 的校验
-            recall_results.append(doc.page_content)
-        else:
-            break
+    # results1 = db1.similarity_search_with_relevance_scores(query=query, k=num_recall)
+    #
+    # # 第1路筛选
+    # for doc, score in results1:
+    #     if score > score_threshold:
+    #         # 执行 metadata 的校验
+    #         recall_results.append(doc.page_content)
+    #     else:
+    #         break
 
     # 第 2 路召回
     results2 = db2.similarity_search_with_relevance_scores(query=query, k=num_recall)
@@ -131,7 +133,7 @@ def get_context_from_db(query="你好吗？",
             break
 
     print(len(recall_results))
-    
+
     # 2，重排序
     # print(len(recall_results))
 
@@ -146,8 +148,8 @@ def get_context_from_db(query="你好吗？",
     return final_results
 
 
-if  __name__ == "__main__":
+if __name__ == "__main__":
     query = "小儿急性支气管炎"
     print(query)
-    print("*"*100)
+    print("*" * 100)
     print(get_context_from_db(query))
