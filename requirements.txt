@@ -41,6 +41,7 @@ langchain-core
 langchain-openai
 langchain-community
 langchain_chroma
+langchain_deepseek
 
 # 向量数据库
 chromadb
