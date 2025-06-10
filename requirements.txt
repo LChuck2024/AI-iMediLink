@@ -1,5 +1,5 @@
 # Web框架
-streamlit==1.28.0
+streamlit
 # Streamlit 服务器部署依赖
 altair<5
 protobuf<4
@@ -46,6 +46,6 @@ chromadb==0.4.15
 
 # 其他依赖
 # SQLite 兼容性（解决 Chroma SQLite 版本要求）
-sqlite3 >= 3.35.0
+sqlite3
 pydantic==2.3.0
 typing-extensions==4.7.1
