@@ -36,10 +36,10 @@ plotly==5.15.0
 jupyter==1.0.0
 
 # LangChain生态系统
-langchain==0.0.292
-langchain-core>=0.1.7,<0.2.0
-langchain-openai==0.0.2
-langchain-community==0.0.1
+langchain
+langchain-core
+langchain-openai
+langchain-community
 
 # 向量数据库
 chromadb==0.4.15
