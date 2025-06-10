@@ -1,3 +1,11 @@
+# SQLite版本兼容性修复 - 必须在导入任何依赖之前
+try:
+    import pysqlite3
+    import sys
+    sys.modules['sqlite3'] = pysqlite3
+except ImportError:
+    pass
+
 import streamlit as st
 import os
 
