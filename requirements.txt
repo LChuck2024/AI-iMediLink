@@ -40,6 +40,7 @@ langchain
 langchain-core
 langchain-openai
 langchain-community
+langchain_chroma
 
 # 向量数据库
 chromadb
