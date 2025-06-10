@@ -380,7 +380,7 @@ st.markdown("""
 <div class='cta-section'>
     <h2 style='margin-bottom: 1rem; font-size: 2rem;'>🚀 开始您的智能医疗咨询之旅</h2>
     <p style='font-size: 1.1rem; margin-bottom: 2rem; opacity: 0.9;'>专业AI助手随时为您提供医疗咨询服务，让健康管理更简单</p>
-    <a href='/1_医脉通' class='cta-button' style='text-decoration: none;'>立即开始咨询 →</a>
+    <a href='医脉通' class='cta-button' style='text-decoration: none;'>立即开始咨询 →</a>
 </div>
 """, unsafe_allow_html=True)
 
