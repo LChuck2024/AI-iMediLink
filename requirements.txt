@@ -43,6 +43,7 @@ langchain-community
 
 # 向量数据库
 chromadb
+pysqlite3-binary
 
 # 其他依赖
 pydantic==2.3.0
