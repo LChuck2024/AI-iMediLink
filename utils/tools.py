@@ -1,4 +1,13 @@
 import os
+
+# SQLite版本兼容性修复 - 必须在导入chromadb之前
+try:
+    import pysqlite3
+    import sys
+    sys.modules['sqlite3'] = pysqlite3
+except ImportError:
+    pass
+
 # 底层 API
 from chromadb import HttpClient
 # 上层 API
