@@ -9,6 +9,7 @@ streamlit
 langchain_deepseek
 langchain_core
 langchain
+langchain_chroma
 
 # 向量数据库
 chromadb
