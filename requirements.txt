@@ -10,6 +10,7 @@ langchain_deepseek
 langchain_core
 langchain
 langchain_chroma
+langchain_community
 
 # 向量数据库
 chromadb
