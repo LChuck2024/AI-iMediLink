@@ -1,5 +1,8 @@
 # 基础依赖
 streamlit
+# Streamlit 服务器部署依赖
+altair<5
+protobuf==3.20.3
 
 # LangChain生态系统
 streamlit
