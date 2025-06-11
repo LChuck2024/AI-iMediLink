@@ -8,8 +8,6 @@ try:
 except ImportError:
     pass
 
-# 底层 API
-from chromadb import HttpClient
 # 上层 API
 from langchain_chroma import Chroma
 from langchain_community.document_compressors import DashScopeRerank
@@ -85,16 +83,15 @@ def get_context_from_db(query="你好吗？",
 
     os.environ["DASHSCOPE_API_KEY"] = load_info("keys")["DASHSCOPE_API_KEY"]
     rerank = DashScopeRerank(model="text-embedding-v3", top_n=4)  # 连接
-    client = HttpClient(host="localhost", port=8000)
-
+    
     # 连接向量化模型
     embed = DashScopeEmbeddings(model='text-embedding-v3')
 
-    # collection
-    # db1 = Chroma(collection_name="db1", embedding_function=embed, client=client, persist_directory = chromadb_path)
-    db2 = Chroma(collection_name="db2", embedding_function=embed, client=client, persist_directory=chromadb_path)
-    db3 = Chroma(collection_name="db3", embedding_function=embed, client=client, persist_directory=chromadb_path)
-    db4 = Chroma(collection_name="db4", embedding_function=embed, client=client, persist_directory=chromadb_path)
+    # collection - 使用本地持久化存储，不需要 HttpClient
+    # db1 = Chroma(collection_name="db1", embedding_function=embed, persist_directory=chromadb_path)
+    db2 = Chroma(collection_name="db2", embedding_function=embed, persist_directory=chromadb_path)
+    db3 = Chroma(collection_name="db3", embedding_function=embed, persist_directory=chromadb_path)
+    db4 = Chroma(collection_name="db4", embedding_function=embed, persist_directory=chromadb_path)
 
     # 1，先做召回
 
