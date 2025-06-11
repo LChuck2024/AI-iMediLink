@@ -159,39 +159,7 @@ st.markdown("""
         position: relative;
     }
     
-    /* AI消息前的图标 */
-    [data-testid="stChatMessageContent"]:not([data-testid*="user"])::before {
-        content: '🤖';
-        position: absolute;
-        left: -2.5rem;
-        top: 0.5rem;
-        font-size: 1.5rem;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border-radius: 50%;
-        width: 2rem;
-        height: 2rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    }
-    
-    /* 用户消息前的图标 */
-    [data-testid="stChatMessageContent"][data-testid*="user"]::before {
-        content: '👤';
-        position: absolute;
-        right: -2.5rem;
-        top: 0.5rem;
-        font-size: 1.2rem;
-        background: white;
-        border-radius: 50%;
-        width: 2rem;
-        height: 2rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    }
+    /* 移除自定义头像图标，使用Streamlit默认头像 */
     
     /* 按钮样式 */
     .stButton > button {
@@ -313,7 +281,10 @@ if "messages" not in st.session_state:
 
 # 显示聊天记录
 for msg in st.session_state.messages:
-    st.chat_message(msg["role"]).write(msg["content"])
+    if msg["role"] == "assistant":
+        st.chat_message(msg["role"], avatar="🩺").write(msg["content"])
+    else:
+        st.chat_message(msg["role"]).write(msg["content"])
 
 # 获取模型配置
 model_info = load_info("models")[selected_model]
@@ -374,7 +345,7 @@ if question := st.chat_input("💬 请详细描述您的症状或医疗问题...
     st.chat_message("user").write(question)
 
     # 获取机器人回复 (显示加载状态)
-    with st.chat_message("assistant"):
+    with st.chat_message("assistant", avatar="🩺"):
         try:
             start_time = time()
             print(f"开始处理消息: {question}")
