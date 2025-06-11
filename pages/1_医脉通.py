@@ -313,6 +313,7 @@ prompt_template = ChatPromptTemplate.from_messages([
     ("system", system_prompt + """\n已知内容：{RAG}，
                                 如果找到相关内容，请优先从“{RAG}”中提取内容，整合加工后回答，并标明知识来自检索库。
                                 如果找不到相关内容，请用你的专业知识进行回答，并标明知识来自大模型。
+                                注意：如果用户问你关于开发者、公司或者相关问题，请回答开发者是"AIE-52 G5"。
                              """),
     ("human", "{user_input}")
 ])
