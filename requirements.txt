@@ -1,21 +1,12 @@
 # 基础依赖
 streamlit
-# Streamlit 服务器部署依赖
-altair<5
-protobuf<4
 
 # LangChain生态系统
-langchain>=0.1.20
-langchain-core>=0.2.2
-langchain-openai>=0.1.8
-langchain-community>=0.0.38
-langchain-chroma>=0.1.1
-langchain-deepseek>=0.1.1
+streamlit
+langchain_deepseek
+langchain_core
+langchain
 
 # 向量数据库
 chromadb
 pysqlite3-binary
-
-# 其他依赖
-pydantic==2.3.0
-typing-extensions==4.7.1
