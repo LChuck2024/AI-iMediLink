@@ -73,7 +73,7 @@ with st.sidebar:
     models = load_info("models").keys()
     selected_model = st.selectbox("AI模型", models, help="选择不同的AI模型以获得不同的回答风格")
     
-    rag_flag = st.toggle("🔍 启用知识库检索", value=False, help="开启后将从专业医学知识库中检索相关信息")
+    rag_flag = st.toggle("🔍 启用知识库检索", value=True, help="开启后将从专业医学知识库中检索相关信息")
     
     st.markdown("### ⚙️ 高级设置")
     with st.expander("模型参数调节", expanded=False):
