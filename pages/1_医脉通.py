@@ -21,7 +21,7 @@ from time import time
 
 # LangChain 配置
 os.environ["LANGCHAIN_TRACING"] = "true"
-os.environ["LANGCHAIN_PROJECT"] = "AIGC"
+os.environ["LANGCHAIN_PROJECT"] = "AI-iMediLink"
 os.environ["LANGCHAIN_API_KEY"] = load_info("keys")["LANGCHAIN_API_KEY"]
 os.environ["DASHSCOPE_API_KEY"] = load_info("keys")["DASHSCOPE_API_KEY"]
 
