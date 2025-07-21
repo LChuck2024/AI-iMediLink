@@ -96,6 +96,21 @@ with st.sidebar:
     
     st.markdown("---")
     
+    # 症状自检工具入口
+    st.markdown("""
+    <div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;'>
+        <h4 style='margin: 0 0 0.5rem 0; color: white;'>🔍 症状自检工具</h4>
+        <p style='margin: 0; color: rgba(255,255,255,0.9); font-size: 0.85rem;'>
+            不确定如何描述症状？使用症状自检工具获得结构化帮助
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    if st.button("🔍 使用症状自检工具", key="symptom_checker_btn", use_container_width=True):
+        st.switch_page('pages/2_症状自检工具.py')
+    
+    st.markdown("---")
+    
     # 使用提示
     st.markdown("""
     <div style='background: #e8f4fd; padding: 1rem; border-radius: 8px; border-left: 4px solid #2196F3;'>
@@ -339,6 +354,102 @@ else:
              | StrOutputParser()
              )
 # print(f'chain{chain}')
+
+# 检查是否有来自症状自检工具的自动咨询请求
+if hasattr(st.session_state, 'auto_consultation') and st.session_state.auto_consultation:
+    if hasattr(st.session_state, 'auto_symptom_description') and st.session_state.auto_symptom_description:
+        # 自动添加症状描述到聊天记录
+        symptom_description = st.session_state.auto_symptom_description
+        st.session_state.messages.append({"role": "user", "content": symptom_description})
+        
+        # 清除自动咨询标志
+        del st.session_state.auto_consultation
+        del st.session_state.auto_symptom_description
+        
+        # 显示自动输入的症状描述
+        st.chat_message("user").write(symptom_description)
+        
+        # 自动处理AI回复
+        with st.chat_message("assistant", avatar="🩺"):
+            try:
+                start_time = time()
+                print(f"自动处理症状描述: {symptom_description}")
+                
+                # 显示思考状态
+                thinking_placeholder = st.empty()
+                thinking_placeholder.markdown("""
+                <div style='display: flex; align-items: center; gap: 0.5rem; padding: 1rem; 
+                            background: #f0f8ff; border-radius: 10px; border-left: 4px solid #667eea;'>
+                    <div style='font-size: 1.2rem;'>🤔</div>
+                    <div style='color: #667eea; font-weight: 500;'>AI助手正在分析您的症状...</div>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                # 创建空白占位符用于流式输出
+                response_placeholder = st.empty()
+                response_content = ""
+                
+                # 使用LangChain处理消息并实现流式输出
+                for chunk in chain.stream({"user_input": symptom_description}):
+                    response_content += chunk
+                    thinking_placeholder.empty()  # 清除思考状态
+                    response_placeholder.markdown(response_content + "▌")  # 添加光标效果
+
+                # 完成后显示最终内容
+                import re
+
+                think_content_match = re.search(r'<think>(.*?)</think>', response_content, re.DOTALL)
+                if think_content_match:
+                    think_text = think_content_match.group(1).strip()
+                    # 移除原始response_content中的think标签内容
+                    response_content_without_think = re.sub(r'<think>.*?</think>', '', response_content,
+                                                            flags=re.DOTALL)
+                    with st.expander("🧠 查看AI思考过程", expanded=False):
+                        st.markdown(f"""
+                        <div style='background: #f8f9fa; padding: 1rem; border-radius: 8px; 
+                                    border-left: 4px solid #667eea; font-size: 0.9rem;'>
+                            {think_text}
+                        </div>
+                        """, unsafe_allow_html=True)
+                    response_placeholder.markdown(response_content_without_think)
+                else:
+                    response_placeholder.markdown(response_content)
+                    
+                end_time = time()
+                duration = (end_time - start_time).__trunc__()
+                print(f"自动症状分析完成，耗时: {duration}秒")
+                
+                # 显示处理时间和来源信息
+                source_info = "知识库 + AI模型" if rag_flag else "AI模型"
+                st.markdown(f"""
+                <div style='margin-top: 1rem; padding: 0.5rem; background: #f8f9fa; 
+                            border-radius: 8px; font-size: 0.8rem; color: #5a6c7d; text-align: center;'>
+                    📊 处理耗时: {duration}秒 | 🔍 信息来源: {source_info} | 🤖 模型: {selected_model}
+                    <br>💡 此分析基于症状自检工具生成的详细描述
+                </div>
+                """, unsafe_allow_html=True)
+                
+            except Exception as e:
+                print(f"自动症状分析错误: {e}")
+                thinking_placeholder.empty()
+                response_placeholder.markdown(f"""
+                <div style='background: #ffebee; padding: 1rem; border-radius: 8px; 
+                            border-left: 4px solid #f44336; color: #c62828;'>
+                    ❌ 抱歉，自动分析症状时出现了错误：{str(e)}
+                    
+                    请尝试：
+                    - 手动重新描述症状
+                    - 切换其它模型
+                    - 检查网络连接
+                </div>
+                """)
+                response_content = f"抱歉，我无法分析您的症状。错误信息：{str(e)}"
+
+        # 将AI回复添加到聊天记录
+        st.session_state.messages.append({"role": "assistant", "content": response_content})
+        
+        # 显示成功提示
+        st.success("✅ 症状自检工具已自动为您生成AI分析！")
 
 # 处理用户输入
 if question := st.chat_input("💬 请详细描述您的症状或医疗问题..."):
