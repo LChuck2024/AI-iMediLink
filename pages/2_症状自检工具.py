@@ -548,7 +548,7 @@ def step_5_generate_report():
     """, unsafe_allow_html=True)
     
     # 操作按钮
-    col1, col2, col3 = st.columns(3)
+    col1, col2, col3, col4 = st.columns(4)
     
     with col1:
         if st.button("🔙 重新开始", key="restart_checker"):
@@ -574,25 +574,69 @@ def step_5_generate_report():
             st.switch_page('pages/1_医脉通.py')
     
     with col3:
-        if st.button("📄 导出报告", key="export_report"):
-            # 生成可下载的报告
-            report_content = f"""
-症状自检报告
-生成时间：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+        # 生成更详细的报告
+        report_content = f"""
+医脉通智能诊疗系统 - 症状自检报告
+{'='*50}
+生成时间：{datetime.now().strftime('%Y年%m月%d日 %H:%M:%S')}
+身体部位：{st.session_state.selected_body_part}
+主要症状：{st.session_state.selected_symptom}
+严重程度：{severity}
+{'='*50}
 
+📋 详细症状描述：
 {detailed_description}
 
----
-本报告由症状自检工具生成，仅供参考。
-如有紧急情况，请立即就医。
-            """
+{'='*50}
+⚠️ 重要提醒：
+- 本报告仅供个人参考使用
+- 不能替代专业医生诊断
+- 如有严重症状请及时就医
+- 请妥善保管个人健康信息
+{'='*50}
+        """
+        
+        st.download_button(
+            label="📄 导出报告",
+            data=report_content,
+            file_name=f"症状自检报告_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt",
+            mime="text/plain",
+            use_container_width=True,
+            help="直接下载症状自检报告"
+        )
+    
+    with col4:
+        if st.button("📋 复制报告", key="copy_report", use_container_width=True, help="点击后显示报告内容，可手动复制"):
+            # 显示报告内容
+            st.markdown("### 📋 症状自检报告内容")
+            st.markdown("---")
             
-            st.download_button(
-                label="📥 下载报告",
-                data=report_content,
-                file_name=f"症状自检报告_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt",
-                mime="text/plain"
+            # 使用st.text_area显示内容，便于复制
+            st.text_area(
+                "症状自检报告",
+                value=report_content,
+                height=300,
+                help="选中全部内容后按 Ctrl+C (Mac: Cmd+C) 复制"
             )
+            
+            # 提供复制按钮和说明
+            col_copy1, col_copy2 = st.columns([1, 1])
+            with col_copy1:
+                st.success("✅ 报告内容已显示")
+            with col_copy2:
+                st.info("💡 选中上方文本后复制")
+            
+            # 添加复制提示
+            st.markdown("""
+            <div style='background: #e8f4fd; padding: 1rem; border-radius: 8px; border-left: 4px solid #2196F3; margin-top: 1rem;'>
+                <h4 style='margin: 0 0 0.5rem 0; color: #1976D2;'>📋 复制操作步骤：</h4>
+                <ol style='margin: 0; color: #424242; padding-left: 1.5rem;'>
+                    <li>点击上方文本框，按 <strong>Ctrl+A</strong> (Mac: <strong>Cmd+A</strong>) 全选内容</li>
+                    <li>按 <strong>Ctrl+C</strong> (Mac: <strong>Cmd+C</strong>) 复制到剪贴板</li>
+                    <li>粘贴到您需要的地方</li>
+                </ol>
+            </div>
+            """, unsafe_allow_html=True)
 
 def main():
     """主函数"""

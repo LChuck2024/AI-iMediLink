@@ -437,6 +437,11 @@ st.markdown("""
             <h3 style='color: #2c3e50; margin-bottom: 0.5rem;'>参数调节</h3>
             <p style='color: #5a6c7d; font-size: 0.9rem;'>根据需要调整AI模型参数</p>
         </div>
+        <div style='text-align: center; padding: 1rem;'>
+            <div style='font-size: 2.5rem; margin-bottom: 1rem;'>📄</div>
+            <h3 style='color: #2c3e50; margin-bottom: 0.5rem;'>记录导出</h3>
+            <p style='color: #5a6c7d; font-size: 0.9rem;'>导出聊天记录和症状报告</p>
+        </div>
     </div>
 </div>
 """, unsafe_allow_html=True)
@@ -505,6 +510,7 @@ with st.expander("📖 详细使用指南", expanded=False):
                 <li>结构化问答，确保信息完整</li>
                 <li>严重程度评估，帮助判断紧急程度</li>
                 <li>生成详细报告，可直接用于AI咨询</li>
+                <li>支持导出报告，便于保存和分享</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
@@ -545,6 +551,7 @@ with st.expander("📖 详细使用指南", expanded=False):
                 <li>不提供具体的药物处方，只能给出用药建议</li>
                 <li>不处理紧急医疗情况，紧急情况请立即就医</li>
                 <li>不提供手术建议，手术相关问题请咨询外科医生</li>
+                <li>导出的记录仅供个人参考，请妥善保管隐私信息</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)

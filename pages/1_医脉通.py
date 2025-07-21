@@ -538,15 +538,113 @@ if question := st.chat_input("💬 请详细描述您的症状或医疗问题...
 
 # 底部操作区域
 st.markdown("<br>", unsafe_allow_html=True)
-col1, col2, col3 = st.columns([1, 2, 1])
 
-with col2:
-    if len(st.session_state.messages) > 1:
-        if st.button("🗑️ 清空对话历史", use_container_width=True):
+# 聊天记录导出功能
+def export_chat_history():
+    """导出聊天记录为文本文件"""
+    if len(st.session_state.messages) <= 1:
+        return None
+    
+    # 生成文件名
+    from datetime import datetime
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = f"医脉通_{dept}_咨询记录_{timestamp}.txt"
+    
+    # 构建聊天记录内容
+    chat_content = f"""医脉通智能诊疗系统 - 聊天记录导出
+{'='*50}
+科室: {dept}
+模型: {selected_model}
+导出时间: {datetime.now().strftime("%Y年%m月%d日 %H:%M:%S")}
+{'='*50}
+
+"""
+    
+    for i, msg in enumerate(st.session_state.messages, 1):
+        role_emoji = "👤" if msg["role"] == "user" else "🤖"
+        role_name = "用户" if msg["role"] == "user" else "AI助手"
+        chat_content += f"\n【第{i}轮对话】\n"
+        chat_content += f"{role_emoji} {role_name}:\n"
+        chat_content += f"{msg['content']}\n"
+        chat_content += "-" * 30 + "\n"
+    
+    chat_content += f"""
+{'='*50}
+⚠️ 重要提醒：
+- 本记录仅供个人参考使用
+- AI建议不能替代专业医生诊断
+- 如有严重症状请及时就医
+- 请妥善保管个人健康信息
+{'='*50}
+"""
+    
+    return chat_content, filename
+
+# 操作按钮区域
+if len(st.session_state.messages) > 1:
+    col1, col2, col3, col4 = st.columns([1, 1, 1, 1])
+    
+    with col1:
+        if st.button("🗑️ 清空对话", use_container_width=True, help="清空所有聊天记录"):
             st.session_state.messages = [
                 {"role": "assistant", "content": f"您好！我是医脉通{dept}智能助手 🏥\n\n我可以为您提供专业的{dept}医疗咨询服务。请详细描述您的症状或问题，我会根据专业知识为您提供建议。\n\n⚠️ 请注意：我的建议仅供参考，如有紧急情况请立即就医。"}
             ]
             st.rerun()
+    
+    with col2:
+        chat_data = export_chat_history()
+        if chat_data:
+            chat_content, filename = chat_data
+            st.download_button(
+                label="📄 导出记录",
+                data=chat_content,
+                file_name=filename,
+                mime="text/plain",
+                use_container_width=True,
+                help="直接下载聊天记录为文本文件"
+            )
+    
+    with col3:
+        if chat_data:
+            if st.button("📋 复制记录", use_container_width=True, help="点击后显示聊天记录，可手动复制"):
+                # 显示聊天记录
+                st.markdown("### 📋 聊天记录内容")
+                st.markdown("---")
+                
+                # 使用st.text_area显示内容，便于复制
+                st.text_area(
+                    "聊天记录",
+                    value=chat_content,
+                    height=400,
+                    help="选中全部内容后按 Ctrl+C (Mac: Cmd+C) 复制"
+                )
+                
+                # 提供复制按钮和说明
+                col_copy1, col_copy2 = st.columns([1, 1])
+                with col_copy1:
+                    st.success("✅ 聊天记录已显示")
+                with col_copy2:
+                    st.info("💡 选中上方文本后复制")
+                
+                # 添加复制提示
+                st.markdown("""
+                <div style='background: #e8f4fd; padding: 1rem; border-radius: 8px; border-left: 4px solid #2196F3; margin-top: 1rem;'>
+                    <h4 style='margin: 0 0 0.5rem 0; color: #1976D2;'>📋 复制操作步骤：</h4>
+                    <ol style='margin: 0; color: #424242; padding-left: 1.5rem;'>
+                        <li>点击上方文本框，按 <strong>Ctrl+A</strong> (Mac: <strong>Cmd+A</strong>) 全选内容</li>
+                        <li>按 <strong>Ctrl+C</strong> (Mac: <strong>Cmd+C</strong>) 复制到剪贴板</li>
+                        <li>粘贴到您需要的地方</li>
+                    </ol>
+                </div>
+                """, unsafe_allow_html=True)
+    
+    with col4:
+        if st.button("🔄 刷新页面", use_container_width=True, help="刷新页面重新开始"):
+            st.rerun()
+else:
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        st.info("💡 开始对话后，您可以导出聊天记录")
 
 # 页面底部信息
 st.markdown("""
