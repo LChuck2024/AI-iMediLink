@@ -293,12 +293,75 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+# 自定义按钮样式
+st.markdown("""
+<style>
+    /* 所有按钮的基础样式 */
+    .stButton > button {
+        border-radius: 25px !important;
+        padding: 1rem 2rem !important;
+        font-size: 1.1rem !important;
+        font-weight: 600 !important;
+        transition: all 0.3s ease !important;
+        border: none !important;
+    }
+    
+    /* 症状自检工具按钮样式 */
+    .stButton > button[data-testid="symptom_checker"],
+    .stButton > button[data-testid="symptom_checker_bottom"] {
+        background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%) !important;
+        color: white !important;
+        box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3) !important;
+    }
+    
+    .stButton > button[data-testid="symptom_checker"]:hover,
+    .stButton > button[data-testid="symptom_checker_bottom"]:hover {
+        transform: translateY(-3px) !important;
+        box-shadow: 0 12px 35px rgba(255, 107, 107, 0.4) !important;
+        background: linear-gradient(135deg, #FF5252 0%, #FF7676 100%) !important;
+    }
+    
+    /* 立即开始咨询按钮样式 */
+    .stButton > button[data-testid="top_cta"],
+    .stButton > button[data-testid="bottom_cta"] {
+        background: linear-gradient(135deg, #FF4757 0%, #FF6B7A 100%) !important;
+        color: white !important;
+        box-shadow: 0 8px 25px rgba(255, 71, 87, 0.3) !important;
+    }
+    
+    .stButton > button[data-testid="top_cta"]:hover,
+    .stButton > button[data-testid="bottom_cta"]:hover {
+        transform: translateY(-3px) !important;
+        box-shadow: 0 12px 35px rgba(255, 71, 87, 0.4) !important;
+        background: linear-gradient(135deg, #FF3742 0%, #FF5A6B 100%) !important;
+    }
+    
+    /* 强制覆盖Streamlit默认样式 */
+    div[data-testid="stButton"] > button {
+        background: linear-gradient(135deg, #FF4757 0%, #FF6B7A 100%) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 25px !important;
+        padding: 1rem 2rem !important;
+        font-size: 1.1rem !important;
+        font-weight: 600 !important;
+        box-shadow: 0 8px 25px rgba(255, 71, 87, 0.3) !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    /* 确保按钮文字颜色为白色 */
+    .stButton > button > div {
+        color: white !important;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 col1, col2 = st.columns([1, 1])
 with col1:
-    if st.button('🔍 症状自检工具', key='symptom_checker', use_container_width=True, type='secondary'):
+    if st.button('🔍 症状自检工具', key='symptom_checker', use_container_width=True):
         st.switch_page('pages/2_症状自检工具.py')
 with col2:
-    if st.button('立即开始咨询 →', key='top_cta', use_container_width=True, type='primary'):
+    if st.button('🚀 立即开始咨询 →', key='top_cta', use_container_width=True):
         st.switch_page('pages/1_医脉通.py')
 
 # 项目简介
@@ -566,10 +629,10 @@ st.markdown("""
 
 col1, col2 = st.columns([1, 1])
 with col1:
-    if st.button('🔍 症状自检工具', key='symptom_checker_bottom', use_container_width=True, type='secondary'):
+    if st.button('🔍 症状自检工具', key='symptom_checker_bottom', use_container_width=True):
         st.switch_page('pages/2_症状自检工具.py')
 with col2:
-    if st.button('立即开始咨询 →', key='bottom_cta', use_container_width=True, type='primary'):
+    if st.button('🚀 立即开始咨询 →', key='bottom_cta', use_container_width=True):
         st.switch_page('pages/1_医脉通.py')
 
 # 免责声明
