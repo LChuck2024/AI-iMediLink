@@ -19,6 +19,25 @@ st.set_page_config(
 # 添加CSS样式
 st.markdown("""
 <style>
+    /* 自定义按钮样式 */
+    .stButton > button {
+        background: white !important;
+        color: #667eea !important;
+        padding: 1rem 2rem !important;
+        border-radius: 50px !important;
+        font-weight: 600 !important;
+        border: none !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
+    }
+    
+    .stButton > button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3) !important;
+    }
+</style>
+
+<style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
     
     .stApp {
@@ -273,9 +292,13 @@ st.markdown("""
 <div class='cta-section'>
     <h2 style='margin-bottom: 1rem; font-size: 2rem;'>🚀 开始您的智能医疗咨询之旅</h2>
     <p style='font-size: 1.1rem; margin-bottom: 2rem; opacity: 0.9;'>专业AI助手随时为您提供医疗咨询服务，让健康管理更简单</p>
-    <a href='医脉通' class='cta-button' style='text-decoration: none;'>立即开始咨询 →</a>
 </div>
 """, unsafe_allow_html=True)
+
+col1, col2, col3 = st.columns([1, 1, 1])
+with col2:
+    if st.button('立即开始咨询 →', key='top_cta', use_container_width=True, type='primary'):
+        st.switch_page('pages/1_医脉通.py')
 
 # 项目简介
 st.markdown("""
@@ -397,9 +420,13 @@ st.markdown("""
 <div class='cta-section'>
     <h2 style='margin-bottom: 1rem; font-size: 2rem;'>🚀 开始您的智能医疗咨询之旅</h2>
     <p style='font-size: 1.1rem; margin-bottom: 2rem; opacity: 0.9;'>专业AI助手随时为您提供医疗咨询服务，让健康管理更简单</p>
-    <a href='医脉通' class='cta-button' style='text-decoration: none;'>立即开始咨询 →</a>
 </div>
 """, unsafe_allow_html=True)
+
+col1, col2, col3 = st.columns([1, 1, 1])
+with col2:
+    if st.button('立即开始咨询 →', key='bottom_cta', use_container_width=True, type='primary'):
+        st.switch_page('pages/1_医脉通.py')
 
 # 免责声明
 st.markdown("""

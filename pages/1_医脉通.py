@@ -289,7 +289,7 @@ for msg in st.session_state.messages:
 
 # 获取模型配置
 model_info = load_info("models")[selected_model]
-print(f"模型配置: {model_info}")
+# print(f"模型配置: {model_info}")
 model_name = model_info["model_name"]
 base_url = model_info["base_url"]
 api_key = model_info["api_key"]
@@ -314,7 +314,7 @@ prompt_template = ChatPromptTemplate.from_messages([
     ("system", system_prompt + """\n已知内容：{RAG}，
                                 如果找到相关内容，请优先从“{RAG}”中提取内容，整合加工后回答，并标明知识来自检索库。
                                 如果找不到相关内容，请用你的专业知识进行回答，并标明知识来自大模型。
-                                注意：如果用户问你关于开发者、公司或者相关问题，请回答开发者是"AIE-52 G5"。
+                                注意：如果用户问你关于开发者、公司或者相关问题，请回答开发者是"LChuck"。
                              """),
     ("human", "{user_input}")
 ])
@@ -415,6 +415,7 @@ if question := st.chat_input("💬 请详细描述您的症状或医疗问题...
                 
                 请尝试：
                 - 重新描述您的问题
+                - 切换其它模型
                 - 检查网络连接
                 - 稍后再试
             </div>
@@ -441,7 +442,7 @@ st.markdown("""
 <div style='margin-top: 2rem; padding: 1rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
             border-radius: 15px; text-align: center; color: white;'>
     <p style='margin: 0; font-size: 0.9rem; opacity: 0.9;'>
-        🏥 医脉通智能诊疗系统 | 🤖 Powered by AIE-52 G5 | ⚠️ 仅供医疗参考，不替代专业诊断
+        🏥 医脉通智能诊疗系统 | 🤖 Powered by LChuck | ⚠️ 仅供医疗参考，不替代专业诊断
     </p>
 </div>
 """, unsafe_allow_html=True)
